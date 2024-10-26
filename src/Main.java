@@ -1,5 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        CurrencyConverterManager.Menu();
+        GUI gui = new GUI();
+        //CurrencyConverterManager.Menu();
     }
 }
