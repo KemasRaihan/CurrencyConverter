@@ -5,11 +5,13 @@ import java.awt.event.ActionListener;
 
 public class GUI implements ActionListener {
 
-    private JLabel convertedAmount;
-    private JLabel enteredAmount;
-    private JLabel promptLabel;
-    private JFrame frame;
-    private JPanel panel;
+    private static JLabel result;
+    private static JLabel promptLabel;
+    private static JFrame frame;
+    private static JPanel panel;
+
+    private static DollarConverter converter;
+
 
     private JButton convertButton;
 
@@ -18,21 +20,23 @@ public class GUI implements ActionListener {
         frame = new JFrame();
         panel = new JPanel();
 
+        converter = new DollarConverter();
+
         convertButton = new JButton("Convert");
         convertButton.addActionListener(this);
 
-        promptLabel = new JLabel("Enter the currency");
+        promptLabel = new JLabel("Enter the amount in ($)");
 
-        inputField = new JTextField(15);
+        inputField = new JTextField(16);
 
-        convertedAmount = new JLabel();
+        result = new JLabel();
 
         panel.setBorder(BorderFactory.createEmptyBorder(120,120,120,120));
         panel.setLayout(new GridLayout(0,1));
         panel.add(promptLabel);
         panel.add(inputField);
         panel.add(convertButton);
-        panel.add(convertedAmount);
+        panel.add(result);
 
         frame.add(panel, BorderLayout.CENTER);
 
@@ -49,14 +53,27 @@ public class GUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        String input = e.getActionCommand();
-        if (input.equals("submit")) {
-            // set the text of the label to the text of the field
-            enteredAmount.setText(inputField.getText());
+        String s = e.getActionCommand();
+        if (s.equals("Convert")) {
+            // retrieve input
+            String input = inputField.getText();
+
+            // convert to float
+            Float enteredAmount = Float.parseFloat(input);
+
+            // convert dollars to pound sterling
+            Float newAmount = converter.convertToSterling(enteredAmount);
+
+            // convert to string
+            String newAmountStr = Float.toString(newAmount);
+
+            String text = "$" + input + " is " + "£" + newAmountStr;
+
+            // set result
+            result.setText(text);
 
             // set the text of field to blank
-            inputField.setText("  ");
-            convertedAmount.setText("The new currency is  ");
+            inputField.setText("");
         }
 
 
